@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "414194200071",
+    "project_id": "zenlyf-dfef2",
+    "storage_bucket": "zenlyf-dfef2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414194200071:android:5948c6f175dc6c322e04a2",
+        "android_client_info": {
+          "package_name": "com.example.firebaseroot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414194200071-1vn9tpqbu267ggik81cvl2qfoon0bg7r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.firebaseroot",
+            "certificate_hash": "2600dfa71e0949efc1075a3ef920b039117464f4"
+          }
+        },
+        {
+          "client_id": "414194200071-a35scrlnguhp1kgngclrg2gf15vprdl8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC769qjAv0s58WANc4QFnn-Kn1BDG_sD3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414194200071-a35scrlnguhp1kgngclrg2gf15vprdl8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
