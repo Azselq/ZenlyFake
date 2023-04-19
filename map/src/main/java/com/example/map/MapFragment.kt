@@ -81,6 +81,10 @@ class MapFragment : Fragment(), MapContract.Handler {
         //val otherPeople = mutableListOf<List<OtherPeopleGeo>>()
         //otherPeople.add(MapRepositoryPlugin.getMapRepository().getOthersUsers())
         //Log.d("123","$otherPeople")
+        MapRepositoryPlugin.getMapRepository().subscribeOthersUsersList()
+        MapRepositoryPlugin.getMapRepository().getOthersUsersListObservable().subscribe { 
+            Log.d("checkResult", "setGeoOtherPeople: $it")
+        }
 
         binding.map.map.apply {
             mapObjects.addPlacemark(

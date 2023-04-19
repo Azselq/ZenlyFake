@@ -75,9 +75,6 @@ class HostFragment : Fragment(), MapContract {
                 it.longitude
             )
         }
-        val otherPeople = mutableListOf<List<OtherPeopleGeo>>()
-        otherPeople.add(MapRepositoryPlugin.getMapRepository().getOthersUsers())
-        Log.d("123","$otherPeople")
         (childFragmentManager.fragments.firstOrNull { it is MapContract.Handler } as? MapContract.Handler)?.setGeoOtherPeople(37.42,-122.123)
     }
     private lateinit var viewModel: HostViewModel
