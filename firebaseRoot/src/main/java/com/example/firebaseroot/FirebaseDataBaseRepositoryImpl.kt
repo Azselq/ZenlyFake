@@ -4,11 +4,14 @@ import android.util.Log
 import com.example.responce_models.OtherPeopleGeo
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-internal class FirebaseDataBaseRepositoryImpl: FirebaseDataBaseRepository {
+internal class FirebaseDataBaseRepositoryImpl : FirebaseDataBaseRepository {
 
     private val firestore = Firebase.firestore
-    var userList = mutableListOf<OtherPeopleGeo>()
+    private val otherPeopleGeoSubject = BehaviorSubject.create<Pair<List<OtherPeopleGeo>, Throwable?>>()
+
     override fun uploadGeo(latitude: Double, longitude: Double) {
         firestore.collection("UsersGeo").document(FirebasePlugin.getUserId()).set(
             hashMapOf("latitude" to latitude, "longitude" to longitude, "name" to FirebasePlugin.getUserId())
@@ -20,18 +23,17 @@ internal class FirebaseDataBaseRepositoryImpl: FirebaseDataBaseRepository {
             }
     }
 
-    override fun getOthersUsers(): List<OtherPeopleGeo> {
+    override fun subscribeOthersUsersList() {
         firestore.collection("UsersGeo").get().addOnSuccessListener {
-            for(user in it){
-                var data = user.toObject(OtherPeopleGeo::class.java)
-                userList.add(data)
-                Log.d("getUsers","${data}")
-                Log.d("userList","${userList}")
-            }
+            val userList = it.map { user -> user.toObject(OtherPeopleGeo::class.java) }
+            // вот тут поставь отлов ошибок=)
+            otherPeopleGeoSubject.onNext(
+                Pair(userList, null)
+            )
         }
-        Log.d("userListBeforeReturn","$userList")
-        return userList
-      }
+    }
+
+    override fun getOthersUsersListObservable(): Observable<Pair<List<OtherPeopleGeo>, Throwable?>> = otherPeopleGeoSubject
 }
 
 

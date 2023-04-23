@@ -12,9 +12,9 @@ object MapRepositoryPlugin {
             override fun uploadGeo(latitude: Double, longitude: Double) =
                 firebaseDataBaseRepository.uploadGeo(latitude, longitude)
 
+            override fun subscribeOthersUsersList() = firebaseDataBaseRepository.subscribeOthersUsersList()
 
-
-            override fun getOthersUsers(): List<OtherPeopleGeo> = firebaseDataBaseRepository.getOthersUsers()
+            override fun getOthersUsersListObservable() = firebaseDataBaseRepository.getOthersUsersListObservable()
 
         }
     }
