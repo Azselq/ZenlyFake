@@ -30,6 +30,8 @@ internal class FirebaseDataBaseRepositoryImpl : FirebaseDataBaseRepository {
             otherPeopleGeoSubject.onNext(
                 Pair(userList, null)
             )
+        }.addOnFailureListener{ e->
+            Log.d("checkResult", "error: $e")
         }
     }
 

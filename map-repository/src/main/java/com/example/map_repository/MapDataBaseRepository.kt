@@ -1,7 +1,9 @@
 package com.example.map_repository
 
+
 import com.example.responce_models.OtherPeopleGeo
 import io.reactivex.rxjava3.core.Observable
+
 
 interface MapDataBaseRepository {
     fun uploadGeo( latitude: Double, longitude: Double)

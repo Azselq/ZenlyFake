@@ -16,6 +16,10 @@ internal class FirebaseAuthRepositoryImpl : FirebaseAuthRepository {
         logIn(email, password)
     }
 
+    override fun exit() {
+        FirebaseAuth.getInstance().signOut()
+    }
+
 
     private fun logIn(email: String, password: String) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)

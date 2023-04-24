@@ -31,8 +31,8 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply.setOnClickListener {
-            var email = binding.login.toString()
-            var password = binding.number.toString()
+            val email = binding.login.text.toString()
+            val password = binding.number.text.toString()
             Log.d("123","$email, $password")
             viewModel.logIn(email,password)
         }

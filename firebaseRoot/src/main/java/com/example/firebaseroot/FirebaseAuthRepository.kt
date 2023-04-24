@@ -8,4 +8,6 @@ interface FirebaseAuthRepository {
     fun getStateObservable(): Observable<AuthState>
 
     fun authWithEmailAddPassword(email: String, password: String)
+
+    fun exit()
 }

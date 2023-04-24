@@ -70,7 +70,8 @@ class MapFragment : Fragment(), MapContract.Handler {
             mapObjects.addPlacemark(
                 Point(latitude, longitude),
                 ImageProvider.fromBitmap(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_gpp_good_24)?.toBitmap()
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_gpp_good_24)
+                        ?.toBitmap()
                 )
             )
         }
@@ -78,24 +79,38 @@ class MapFragment : Fragment(), MapContract.Handler {
     }
 
     override fun setGeoOtherPeople(latitude: Double, longitude: Double) {
-        //val otherPeople = mutableListOf<List<OtherPeopleGeo>>()
-        //otherPeople.add(MapRepositoryPlugin.getMapRepository().getOthersUsers())
-        //Log.d("123","$otherPeople")
+        val otherPeople = mutableListOf<List<OtherPeopleGeo>>()
         MapRepositoryPlugin.getMapRepository().subscribeOthersUsersList()
-        MapRepositoryPlugin.getMapRepository().getOthersUsersListObservable().subscribe { 
+        MapRepositoryPlugin.getMapRepository().getOthersUsersListObservable().subscribe{
             Log.d("checkResult", "setGeoOtherPeople: $it")
-        }
+            otherPeople.add(it.first)
+            Log.d("123","$otherPeople")
 
-        binding.map.map.apply {
-            mapObjects.addPlacemark(
-                Point(latitude, longitude),
-                ImageProvider.fromBitmap(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_gpp_good_24)?.toBitmap()
-                )
-            )
+            val points = mutableListOf<Point>()
+            otherPeople.forEach { users ->
+                users.forEach { user ->
+                    val point = user.latitude?.let { it1 -> user.longitude?.let { it2 ->
+                        Point(it1,
+                            it2
+                        )
+                    } }
+                    if (point != null) {
+                        points.add(point)
+                    }
+                }
+            }
+
+            binding.map.map.apply {
+                points.forEach { point ->
+                    mapObjects.addPlacemark(
+                        point,
+                        ImageProvider.fromBitmap(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_gpp_good_24)?.toBitmap()
+                        )
+                    )
+                }
+            }
         }
     }
-
-
 
 }
