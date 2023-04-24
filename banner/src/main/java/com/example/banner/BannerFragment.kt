@@ -34,7 +34,7 @@ class BannerFragment : Fragment() {
         binding.buttonSignOut.setOnClickListener {
             firebaseAuthRepository.exit()
             //parentFragmentManager.popBackStack()
-            //childFragmentManager.beginTransaction().replace(R.id.container, AuthPlugin.getAuthFragment()).addToBackStack(null).commit()
+            childFragmentManager.beginTransaction().replace(R.id.container, AuthPlugin.getAuthFragment()).addToBackStack(null).commit()
 
         }
 
