@@ -5,15 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.auth.AuthPlugin
 import com.example.banner.databinding.FragmentBannerBinding
 import com.example.firebaseroot.FirebaseAuthRepository
 import com.example.firebaseroot.FirebasePlugin
-import com.example.map.MapContract
-import com.example.map.MapPlugin
 
 
-class BannerFragment : Fragment() {
+class BannerFragment : Fragment(), BannerContract.Handler {
     private val firebaseAuthRepository: FirebaseAuthRepository = FirebasePlugin.getFirebaseAuthRepository()
     lateinit var binding: FragmentBannerBinding
     override fun onCreateView(
@@ -27,19 +24,19 @@ class BannerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.button.setOnClickListener {
-            (parentFragment as? MapContract)?.getGeoPermissions()
-            parentFragmentManager.popBackStack()
-
+            (parentFragment as? BannerContract)?.getGeoPermissions()
         }
         binding.buttonSignOut.setOnClickListener {
             firebaseAuthRepository.exit()
-            //parentFragmentManager.popBackStack()
-            childFragmentManager.beginTransaction().replace(R.id.container, AuthPlugin.getAuthFragment()).addToBackStack(null).commit()
-
+            (parentFragment as? BannerContract)?.openAuthScreen()
         }
 
     }
     companion object {
         fun newInstance() = BannerFragment()
+    }
+
+    override fun closeBanner() {
+        parentFragmentManager.popBackStack()
     }
 }

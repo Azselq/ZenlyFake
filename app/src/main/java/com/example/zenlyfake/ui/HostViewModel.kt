@@ -1,10 +1,8 @@
-package com.example.fakezenly.ui
+package com.example.zenlyfake.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.auth.AuthPlugin
-import com.example.banner.BannerPlugin
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -24,11 +22,7 @@ class HostViewModel : ViewModel() {
                 }
             )
         }
-
     }
-
-
-
 
     sealed class Action {
         object OpenAuthScreen : Action()

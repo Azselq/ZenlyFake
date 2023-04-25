@@ -8,10 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.lifecycle.lifecycleScope
 import com.example.auth.databinding.FragmentAuthBinding
 import com.example.firebaseroot.FirebasePlugin
+import kotlinx.coroutines.launch
 
 class AuthFragment : Fragment() {
+
     private lateinit var viewModel: AuthViewModel
     lateinit var binding: FragmentAuthBinding
 
@@ -36,10 +39,12 @@ class AuthFragment : Fragment() {
             Log.d("123","$email, $password")
             viewModel.logIn(email,password)
         }
+        lifecycleScope.launch {
+            viewModel.actions.collect{
+                (parentFragment as? AuthContract)?.openMainScreen()
+            }
+        }
     }
-
-
-
 
     companion object {
         fun newInstance() = AuthFragment()
