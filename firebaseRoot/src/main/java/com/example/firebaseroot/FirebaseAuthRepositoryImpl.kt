@@ -1,6 +1,5 @@
 package com.example.firebaseroot
 
-import android.content.SharedPreferences
 import com.example.responce_models.AuthState
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.rxjava3.core.Observable

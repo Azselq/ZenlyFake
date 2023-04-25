@@ -12,21 +12,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.auth.AuthContract
 import com.example.auth.AuthPlugin
+import com.example.banner.BannerContract
 import com.example.banner.BannerPlugin
-import com.example.fakezenly.ui.HostViewModel
 import com.example.map.MapContract
 import com.example.map.MapPlugin
 import com.example.zenlyfake.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HostFragment : Fragment(), MapContract {
-
+class HostFragment : Fragment(), MapContract, BannerContract, AuthContract {
 
     override val hasRowGeoPermission: Boolean
         get() = checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -43,7 +42,7 @@ class HostFragment : Fragment(), MapContract {
                 getGeo()
             } else {
                 /** тут типо логика должна быть -_-*/
-                childFragmentManager.beginTransaction().replace(R.id.container, BannerPlugin.getBannerFragment()).addToBackStack(null).commit()
+                replaceFragment(BannerPlugin.getBannerFragment())
             }
         }
 
@@ -60,6 +59,7 @@ class HostFragment : Fragment(), MapContract {
     }
     @SuppressLint("MissingPermission")
     override fun getGeo() {
+        (childFragmentManager.fragments.firstOrNull { it is BannerContract.Handler } as? BannerContract.Handler)?.closeBanner()
         val locationServices =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as android.location.LocationManager
         var location: Location? = null
@@ -93,7 +93,7 @@ class HostFragment : Fragment(), MapContract {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch(Dispatchers.Default) {
+        lifecycleScope.launch(Dispatchers.Main) {
             viewModel.actions.collect {
                 when (it) {
                     HostViewModel.Action.OpenAuthScreen -> replaceFragment(AuthPlugin.getAuthFragment())
@@ -111,5 +111,13 @@ class HostFragment : Fragment(), MapContract {
 
     companion object {
         fun newInstance() = HostFragment()
+    }
+
+    override fun openAuthScreen() {
+        replaceFragment(AuthPlugin.getAuthFragment())
+    }
+
+    override fun openMainScreen() {
+        replaceFragment(MapPlugin.getMapFragment())
     }
 }

@@ -10,7 +10,9 @@ object MapPlugin {
     fun getMapFragment(): Fragment = MapFragment.newInstance()
 
     fun setMapApiKey() {
+        if (isMapApiKeyInstalled.not()) {
+            MapKitFactory.setApiKey("138575a9-f131-44ef-aef8-97d9a48c21bf")
+        }
         isMapApiKeyInstalled = true
-        MapKitFactory.setApiKey("138575a9-f131-44ef-aef8-97d9a48c21bf")
     }
 }
