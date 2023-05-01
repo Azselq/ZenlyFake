@@ -12,7 +12,7 @@ interface MapContract {
     interface Handler {
 
         fun setGeo(latitude: Double, longitude: Double)
-        fun setGeoOtherPeople(latitude: Double,longitude: Double)
+        fun setGeoOtherPeople()
 
 
     }

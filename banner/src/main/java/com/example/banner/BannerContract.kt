@@ -6,6 +6,7 @@ interface BannerContract {
 
     fun getGeoPermissions()
 
+
     interface Handler {
 
         fun closeBanner()

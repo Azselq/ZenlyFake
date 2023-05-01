@@ -11,7 +11,6 @@ import com.example.firebaseroot.FirebasePlugin
 
 
 class BannerFragment : Fragment(), BannerContract.Handler {
-    private val firebaseAuthRepository: FirebaseAuthRepository = FirebasePlugin.getFirebaseAuthRepository()
     lateinit var binding: FragmentBannerBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,10 +24,6 @@ class BannerFragment : Fragment(), BannerContract.Handler {
         super.onViewCreated(view, savedInstanceState)
         binding.button.setOnClickListener {
             (parentFragment as? BannerContract)?.getGeoPermissions()
-        }
-        binding.buttonSignOut.setOnClickListener {
-            firebaseAuthRepository.exit()
-            (parentFragment as? BannerContract)?.openAuthScreen()
         }
 
     }

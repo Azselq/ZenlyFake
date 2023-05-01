@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/map" />
             <option value="$PROJECT_DIR$/map-repository" />
             <option value="$PROJECT_DIR$/responce_models" />
+            <option value="$PROJECT_DIR$/settings" />
             <option value="$PROJECT_DIR$/sharedPreferences" />
           </set>
         </option>

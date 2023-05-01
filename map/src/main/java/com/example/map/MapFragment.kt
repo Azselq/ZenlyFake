@@ -78,7 +78,7 @@ class MapFragment : Fragment(), MapContract.Handler {
         MapRepositoryPlugin.getMapRepository().uploadGeo(latitude, longitude)
     }
 
-    override fun setGeoOtherPeople(latitude: Double, longitude: Double) {
+    override fun setGeoOtherPeople() {
         val otherPeople = mutableListOf<List<OtherPeopleGeo>>()
         MapRepositoryPlugin.getMapRepository().subscribeOthersUsersList()
         MapRepositoryPlugin.getMapRepository().getOthersUsersListObservable().subscribe{
