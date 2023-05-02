@@ -27,7 +27,6 @@ class SettingsFragment : Fragment(), SettingsContract.Handler  {
         super.onViewCreated(view, savedInstanceState)
         binding.signOut.setOnClickListener {
             firebaseAuthRepository.exit()
-            (parentFragment as? SettingsContract)?.buttonSelector()
             (parentFragment as? SettingsContract)?.openAuthScreen()
         }
     }

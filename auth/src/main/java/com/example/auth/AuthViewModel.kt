@@ -1,9 +1,11 @@
 package com.example.auth
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.firebaseroot.FirebaseAuthRepository
 import com.example.firebaseroot.FirebasePlugin
+import com.example.responce_models.AuthState
 import com.example.sharedpreferences.SharedPrefPlugin
 import com.example.sharedpreferences.SharedPrefRepository
 import io.reactivex.rxjava3.disposables.Disposable
@@ -22,8 +24,13 @@ internal class AuthViewModel() : ViewModel() {
 
     init {
         disposable = firebaseAuthRepository.getStateObservable().subscribe {
-            viewModelScope.launch {
-                _actions.emit(Action.OpenMainScreen)
+            when (it) {
+                is AuthState.FailAuth -> Log.d("checkResult", "fail auth")
+                AuthState.SuccessAuth -> {
+                    viewModelScope.launch {
+                        _actions.emit(Action.OpenMainScreen)
+                    }
+                }
             }
         }
     }

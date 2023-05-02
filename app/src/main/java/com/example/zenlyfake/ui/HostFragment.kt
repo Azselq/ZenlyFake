@@ -16,8 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.auth.AuthContract
+import com.example.auth.AuthFragment
 import com.example.auth.AuthPlugin
 import com.example.banner.BannerContract
+import com.example.banner.BannerFragment
 import com.example.banner.BannerPlugin
 import com.example.map.MapContract
 import com.example.map.MapPlugin
@@ -28,14 +30,17 @@ import com.example.zenlyfake.databinding.FragmentHostBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HostFragment : Fragment(), MapContract, BannerContract, AuthContract, SettingsContract{
+class HostFragment : Fragment(), MapContract, BannerContract, AuthContract, SettingsContract {
+
     lateinit var binding: FragmentHostBinding
-    var boolean = false
+
     override val hasRowGeoPermission: Boolean
         get() = checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
 
     override val hasFineGeoPermission: Boolean
         get() = checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+
+    private lateinit var viewModel: HostViewModel
 
     private val geoPermissionLauncher =
         registerForActivityResult(
@@ -46,7 +51,7 @@ class HostFragment : Fragment(), MapContract, BannerContract, AuthContract, Sett
                 getGeo()
             } else {
                 /** тут типо логика должна быть -_-*/
-                binding.navigation.visibility= View.GONE
+                binding.navigation.visibility = View.GONE
                 replaceFragment(BannerPlugin.getBannerFragment())
             }
         }
@@ -63,11 +68,10 @@ class HostFragment : Fragment(), MapContract, BannerContract, AuthContract, Sett
         }
     }
 
-
     @SuppressLint("MissingPermission")
     override fun getGeo() {
         (childFragmentManager.fragments.firstOrNull { it is BannerContract.Handler } as? BannerContract.Handler)?.closeBanner()
-        binding.navigation.visibility =View.VISIBLE
+        binding.navigation.visibility = View.VISIBLE
         val locationServices =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as android.location.LocationManager
         var location: Location? = null
@@ -85,13 +89,12 @@ class HostFragment : Fragment(), MapContract, BannerContract, AuthContract, Sett
 
         (childFragmentManager.fragments.firstOrNull { it is MapContract.Handler } as? MapContract.Handler)?.setGeoOtherPeople()
     }
-    private lateinit var viewModel: HostViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHostBinding.inflate(inflater,container,false)
+        binding = FragmentHostBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -103,17 +106,28 @@ class HostFragment : Fragment(), MapContract, BannerContract, AuthContract, Sett
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val childFragmentManager = childFragmentManager
+        childFragmentManager.addOnBackStackChangedListener {
+            when(childFragmentManager.fragments.lastOrNull()) {
+                null,
+                is AuthFragment,
+                is BannerFragment -> binding.navigation.visibility = View.GONE
+                else -> binding.navigation.visibility = View.VISIBLE
+            }
+        }
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.actions.collect {
                 when (it) {
-                    HostViewModel.Action.OpenAuthScreen -> {replaceFragment(AuthPlugin.getAuthFragment())
-                    binding.navigation.visibility = View.GONE}
+                    HostViewModel.Action.OpenAuthScreen -> {
+                        replaceFragment(AuthPlugin.getAuthFragment())
+                        binding.navigation.visibility = View.GONE
+                    }
                     HostViewModel.Action.OpenMainScreen -> replaceFragment(MapPlugin.getMapFragment())
                 }
             }
         }
         binding.navigation.setOnNavigationItemReselectedListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.map -> replaceFragment(MapPlugin.getMapFragment())
                 R.id.settings -> replaceFragment(SettingsPlugin.getSettingsFragment())
             }
@@ -123,6 +137,7 @@ class HostFragment : Fragment(), MapContract, BannerContract, AuthContract, Sett
     private fun replaceFragment(fragment: Fragment) {
         childFragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit()
     }
+
     private fun checkPermission(permission: String) =
         ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED
 
@@ -136,15 +151,6 @@ class HostFragment : Fragment(), MapContract, BannerContract, AuthContract, Sett
 
     override fun openMainScreen() {
         replaceFragment(MapPlugin.getMapFragment())
-    }
-
-    override fun buttonSelector() {
-        boolean = true
-        if(boolean == true){
-            binding.navigation.visibility = View.GONE
-        }else{
-            binding.navigation.visibility = View.VISIBLE
-        }
     }
 
 }
